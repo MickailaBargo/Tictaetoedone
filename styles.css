@@ -1,0 +1,177 @@
+:root {
+  --cell-size: 100px;
+  --color: #81c3fd; /* Hover color for X and O */
+  --color-set: #0275d8; /* Color when set */
+  --table-bg: rgba(230, 242, 255, 0.9); /* Light blue color with transparency */
+  --winning-bg: rgba(2, 117, 216, 0.8); /* Semi-transparent dark blue for winning message */
+  --l: 10px; /* X line-width */
+  --current-turn-border: 5px solid #ffeb3b; /* Yellow border to indicate current turn */
+  --win-animation: scale(1.2); /* Scale effect for winning cells */
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #1e3a8a 25%, #1e90ff 25%, #1e90ff 50%, #1e3a8a 50%, #1e3a8a 75%, #1e90ff 75%, #1e90ff 100%);
+  background-size: 20px 20px;
+  font-family: 'Bungee Tint', sans-serif;
+  color: #ffffff;
+}
+
+.players {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  background-color: rgba(30, 58, 138, 0.9);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.players h2 {
+  font-size: 1.5rem;
+}
+
+.board {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+  grid-template-columns: repeat(3, auto);
+  background-color: var(--table-bg);
+  border-radius: 15px;
+  padding: 20px;
+  border: var(--current-turn-border); /* Highlight board with current turn */
+  transition: border-color 0.3s ease;
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.7);
+  transition: background-color 0.3s, box-shadow 0.3s ease;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Adds a drop shadow for depth */
+}
+
+.cell.winning {
+  animation: winPulse 0.5s ease-in-out infinite; /* Pulse animation for winning cells */
+  transform: var(--win-animation);
+}
+
+@keyframes winPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.cell.x,
+.cell.circle {
+  cursor: not-allowed;
+}
+
+.board.x .cell:not(.circle):not(.x):hover {
+  background: linear-gradient(
+      to top right,
+      transparent calc(50% - var(--l) / 2),
+      var(--color) calc(50% - var(--l) / 2),
+      calc(50% + var(--l) / 2),
+      transparent calc(50% + var(--l) / 2)
+    ),
+    linear-gradient(
+      to bottom right,
+      transparent calc(50% - var(--l) / 2),
+      var(--color) calc(50% - var(--l) / 2),
+      calc(50% + var(--l) / 2),
+      transparent calc(50% + var(--l) / 2)
+    );
+  background-size: 80% 80%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.cell:not(.circle).x {
+  background: linear-gradient(
+      to top right,
+      transparent calc(50% - var(--l) / 2),
+      var(--color-set) calc(50% - var(--l) / 2),
+      calc(50% + var(--l) / 2),
+      transparent calc(50% + var(--l) / 2)
+    ),
+    linear-gradient(
+      to bottom right,
+      transparent calc(50% - var(--l) / 2),
+      var(--color-set) calc(50% - var(--l) / 2),
+      calc(50% + var(--l) / 2),
+      transparent calc(50% + var(--l) / 2)
+    );
+  background-size: 80% 80%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.board.circle .cell:not(.circle):not(.x):hover {
+  background: radial-gradient(var(--color) 60%, transparent 60%);
+}
+
+.cell:not(.x).circle {
+  background: radial-gradient(var(--color-set) 60%, transparent 60%);
+}
+
+.winning-message {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--winning-bg);
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 5rem;
+  font-family: 'Courier New', Courier, monospace;
+  flex-direction: column;
+}
+
+.winning-message button {
+  border-radius: 10px;
+  font-size: 3rem;
+  background-color: white;
+  border: 1px solid var(--color-set);
+  padding: 0.25em 0.5em;
+  cursor: pointer;
+}
+
+.winning-message button:hover {
+  background-color: var(--color-set);
+  color: white;
+  border-color: white;
+}
+
+.winning-message.show {
+  display: flex;
+}
+
+.container-player-X {
+  position: absolute;
+  top: 40%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+}
+
+.container-player-O {
+  position: absolute;
+  top: 40%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
